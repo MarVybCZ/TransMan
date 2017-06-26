@@ -1,0 +1,25 @@
+﻿<Window x:Class="TransMan.UpdateDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TransMan"
+        mc:Ignorable="d"
+        Title="Translation manager - update dialog" Height="300" Width="489.474">
+    <Grid Margin="10,10,10,10">
+        <TextBlock x:Name="tKeywordOld" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Keyword old:" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbKeywordOld" Height="23" Margin="86,0,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" IsReadOnly="True"/>
+        <TextBlock x:Name="tKeywordNew" HorizontalAlignment="Left" Margin="0,28,0,0" TextWrapping="Wrap" Text="Keyword new:" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbKeywordNew" Height="23" Margin="86,28,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+        <TextBlock x:Name="tEnglishOld" HorizontalAlignment="Left" Margin="0,56,0,0" TextWrapping="Wrap" Text="English old:" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbEnglishOld" Height="23" Margin="86,56,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" IsReadOnly="True"/>
+        <TextBlock x:Name="tEnglishNew" HorizontalAlignment="Left" Margin="0,84,0,0" TextWrapping="Wrap" Text="English new:" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbEnglishNew" Height="23" Margin="86,84,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+        <TextBlock x:Name="tGermanOld" HorizontalAlignment="Left" Margin="0,112,0,0" TextWrapping="Wrap" Text="German old:" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbGermanOld" Height="23" Margin="86,112,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" IsReadOnly="True"/>
+        <TextBlock x:Name="tGermanNew" HorizontalAlignment="Left" Margin="0,140,0,0" TextWrapping="Wrap" Text="German new:" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbGermanNew" Height="23" Margin="86,140,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" />
+        <Button x:Name="btCancel" Content="Cancel" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75" Click="btCancel_Click"/>
+        <Button x:Name="btUpdate" Content="Update" Margin="0,0,10.2,10" HorizontalAlignment="Right" Width="75" Height="22" VerticalAlignment="Bottom" Click="btUpdate_Click"/>
+    </Grid>
+</Window>

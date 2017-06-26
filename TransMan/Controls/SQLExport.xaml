@@ -1,0 +1,14 @@
+﻿<UserControl x:Class="TransMan.Controls.SQLExport"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TransMan.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Export all translations containing" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbSQLExport" HorizontalAlignment="Left" Height="23" Margin="10,31,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="173"/>
+        <Button x:Name="btSQLExport" Content="Export to SQL" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top" Width="93" Click="btSQLExport_Click"/>
+    </Grid>
+</UserControl>

@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="PMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Enumerations">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="enumerationType" Type="nvarchar" MaxLength="255" />
+          <Property Name="value" Type="nvarchar" MaxLength="255" />
+          <Property Name="sortOrder" Type="int" Nullable="false" />
+          <Property Name="i18nKey" Type="int" />
+          <Property Name="isDefault" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Keywords">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="identifier" Type="nvarchar" MaxLength="255" />
+          <Property Name="sortOrder" Type="int" Nullable="false" />
+          <Property Name="isActive" Type="tinyint" Nullable="false" />
+          <Property Name="usedIn" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Translations">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="translation" Type="nvarchar(max)" />
+          <Property Name="identifier" Type="int" />
+          <Property Name="language" Type="int" />
+        </EntityType>
+        <Association Name="FKC0BFB802D2366272">
+          <End Role="Keywords" Type="Self.Keywords" Multiplicity="0..1" />
+          <End Role="Translations" Type="Self.Translations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Keywords">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Translations">
+              <PropertyRef Name="identifier" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PMSModelStoreContainer">
+          <EntitySet Name="Enumerations" EntityType="Self.Enumerations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Keywords" EntityType="Self.Keywords" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Translations" EntityType="Self.Translations" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FKC0BFB802D2366272" Association="Self.FKC0BFB802D2366272">
+            <End Role="Keywords" EntitySet="Keywords" />
+            <End Role="Translations" EntitySet="Translations" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Enumeration">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="enumerationType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="value" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="sortOrder" Type="Int32" Nullable="false" />
+          <Property Name="i18nKey" Type="Int32" />
+          <Property Name="isDefault" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Keyword" Relationship="PMSModel.EnumerationKeyword" FromRole="Enumeration" ToRole="Keyword" />
+        </EntityType>
+        <EntityType Name="Keyword">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="identifier" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="sortOrder" Type="Int32" Nullable="false" />
+          <Property Name="isActive" Type="Byte" Nullable="false" />
+          <Property Name="usedIn" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Translations" Relationship="Self.FKC0BFB802D2366272" FromRole="Keywords" ToRole="Translations" />
+          <NavigationProperty Name="Enumeration" Relationship="PMSModel.EnumerationKeyword" FromRole="Keyword" ToRole="Enumeration" />
+        </EntityType>
+        <EntityType Name="Translation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="translation1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="identifier" Type="Int32" />
+          <Property Name="language" Type="Int32" />
+          <NavigationProperty Name="Keyword" Relationship="Self.FKC0BFB802D2366272" FromRole="Translations" ToRole="Keywords" />
+        </EntityType>
+        <Association Name="FKC0BFB802D2366272">
+          <End Role="Keywords" Type="Self.Keyword" Multiplicity="0..1" />
+          <End Role="Translations" Type="Self.Translation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Keywords">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Translations">
+              <PropertyRef Name="identifier" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PMSEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Enumerations" EntityType="Self.Enumeration" />
+          <EntitySet Name="Keywords" EntityType="Self.Keyword" />
+          <EntitySet Name="Translations" EntityType="Self.Translation" />
+          <AssociationSet Name="FKC0BFB802D2366272" Association="Self.FKC0BFB802D2366272">
+            <End Role="Keywords" EntitySet="Keywords" />
+            <End Role="Translations" EntitySet="Translations" />
+          </AssociationSet>
+          <AssociationSet Name="EnumerationKeyword" Association="PMSModel.EnumerationKeyword">
+            <End Role="Enumeration" EntitySet="Enumerations" />
+            <End Role="Keyword" EntitySet="Keywords" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="EnumerationKeyword">
+          <End Type="PMSModel.Enumeration" Role="Enumeration" Multiplicity="*" />
+          <End Type="PMSModel.Keyword" Role="Keyword" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Keyword">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Enumeration">
+              <PropertyRef Name="i18nKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PMSModelStoreContainer" CdmEntityContainer="PMSEntities">
+          <EntitySetMapping Name="Enumerations">
+            <EntityTypeMapping TypeName="PMSModel.Enumeration">
+              <MappingFragment StoreEntitySet="Enumerations">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="enumerationType" ColumnName="enumerationType" />
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="sortOrder" ColumnName="sortOrder" />
+                <ScalarProperty Name="i18nKey" ColumnName="i18nKey" />
+                <ScalarProperty Name="isDefault" ColumnName="isDefault" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Keywords">
+            <EntityTypeMapping TypeName="PMSModel.Keyword">
+              <MappingFragment StoreEntitySet="Keywords">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="identifier" ColumnName="identifier" />
+                <ScalarProperty Name="sortOrder" ColumnName="sortOrder" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
+                <ScalarProperty Name="usedIn" ColumnName="usedIn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Translations">
+            <EntityTypeMapping TypeName="PMSModel.Translation">
+              <MappingFragment StoreEntitySet="Translations">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="translation1" ColumnName="translation" />
+                <ScalarProperty Name="identifier" ColumnName="identifier" />
+                <ScalarProperty Name="language" ColumnName="language" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

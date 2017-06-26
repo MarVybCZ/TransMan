@@ -1,0 +1,71 @@
+﻿<Window x:Class="TransMan.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TransMan"
+        xmlns:usercontrols="clr-namespace:TransMan.Controls"
+        mc:Ignorable="d"
+        Title="Translation manager" Height="350" Width="525">
+    <Grid>
+
+        <TabControl x:Name="tabControl">
+            <TabItem Header="Keywords">
+                <Grid Background="#FFE5E5E5">
+                    <Grid Margin="10,10,10,10">
+                        <TextBlock x:Name="tKeyword" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Keyword:" Width="130" VerticalAlignment="Top" />
+                        <TextBox x:Name="tbKeyword" Height="23" TextWrapping="Wrap" Text="" TabIndex="1" VerticalAlignment="Top" Margin="66,0,80.4,0" />
+
+                        <TextBlock x:Name="tEnglish" HorizontalAlignment="Left" Margin="0,29,0,0" TextWrapping="Wrap" Text="English:" VerticalAlignment="Top" RenderTransformOrigin="0.53,-0.037"/>
+                        <TextBox x:Name="tbEnglish" Height="23" Margin="66,29,0.4,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+
+                        <TextBlock x:Name="tGerman" HorizontalAlignment="Left" Margin="0,60,0,0" TextWrapping="Wrap" Text="German:" VerticalAlignment="Top"/>
+                        <TextBox x:Name="tbGerman" Height="23" Margin="66,60,0.4,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+
+                        <TextBlock x:Name="tResult" HorizontalAlignment="Left" Margin="0,115,0,0" TextWrapping="Wrap" Text="Result:" VerticalAlignment="Top"/>
+
+                        <TextBox x:Name="tbResult" Margin="66,115,-0.2,96.2" TextWrapping="Wrap" IsReadOnly="True"/>
+
+                        <Button x:Name="btInsert" Content="Insert" HorizontalAlignment="Left" Margin="66,88,0,0" VerticalAlignment="Top" Width="75" Click="btInsert_Click"/>
+                        <Button x:Name="btEnums" Content="Add to enums ..." HorizontalAlignment="Left" Margin="146,88,0,0" VerticalAlignment="Top" Width="114" Click="btEnums_Click" Visibility="Hidden"/>
+                        <Button x:Name="btUpdate" Content="Update ..." HorizontalAlignment="Right" Margin="66,88,0,0" VerticalAlignment="Top" Width="75" Click="btUpdate_Click"/>
+                        <Button x:Name="btExport" Content="Export" HorizontalAlignment="Right" Margin="0,0,79.8,0.2" VerticalAlignment="Bottom" Width="75" Click="btExport_Click"/>
+                        <Button x:Name="btImport" Content="Import" HorizontalAlignment="Right" Margin="0,0,-0.2,0.2" VerticalAlignment="Bottom" Width="75" Click="btImport_Click"/>
+                        <Button x:Name="btFind" Content="Find" Margin="0,1,0.4,0" VerticalAlignment="Top" Click="btFind_Click" HorizontalAlignment="Right" Width="75"/>
+
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Enumerations" IsEnabled="True" Visibility="Collapsed">
+                <Grid Background="#FFE5E5E5">
+                    <TextBlock x:Name="tType" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Enumeration type:" VerticalAlignment="Top" />
+                    <TextBox x:Name="tbType" Height="23" Margin="0,10,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Right" Width="368"/>
+
+                    <TextBlock x:Name="tKey" HorizontalAlignment="Left" Margin="10,52,0,0" TextWrapping="Wrap" Text="Loc keyword:" VerticalAlignment="Top"  />
+                    <TextBox x:Name="tbKey" Height="23" Margin="0,52,10,0" IsReadOnly="True" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Right" Width="368" >
+
+                    </TextBox>
+
+                    <TextBlock x:Name="tValue" HorizontalAlignment="Left" Margin="10,80,0,0" TextWrapping="Wrap" Text="Value:" VerticalAlignment="Top" />
+                    <TextBox x:Name="tbValue" Height="23" Margin="0,80,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Right" Width="368" TextChanged="tbValue_TextChanged"  />
+
+                    <TextBlock x:Name="tSort" HorizontalAlignment="Left" Margin="131,108,0,0" TextWrapping="Wrap" Text="Sort order:" VerticalAlignment="Top" />
+                    <TextBox x:Name="tbSort" Height="23" PreviewTextInput="tbSort_PreviewTextInput" Margin="209,108,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Width="70" TextChanged="tbSort_TextChanged"/>
+
+
+                    <CheckBox x:Name="chbDefault" Content="Is default" HorizontalAlignment="Left" Margin="10,108,0,0" VerticalAlignment="Top" Checked="chbDefault_Checked" Click="chbDefault_Click" />
+                    
+                    <DataGrid x:Name="dataGrid" Margin="10,150,10,10" IsReadOnly="True" AlternationCount="2" CanUserResizeRows="False" SelectionMode="Single" SelectionChanged="dataGrid_SelectionChanged" />
+                    <Button x:Name="btSaveEnum" Content="Save enumeration" Margin="0,109,10,0" VerticalAlignment="Top" Click="btSaveEnum_Click" HorizontalAlignment="Right" Width="114"/>
+
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="SQL export" IsEnabled="True">
+                <Grid Background="#FFE5E5E5">
+                    <usercontrols:SQLExport></usercontrols:SQLExport>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
