@@ -28,5 +28,6 @@ namespace TransMan
         public virtual DbSet<Enumeration> Enumerations { get; set; }
         public virtual DbSet<Keyword> Keywords { get; set; }
         public virtual DbSet<Translation> Translations { get; set; }
+        public virtual DbSet<ISOLanguage> ISOLanguages { get; set; }
     }
 }

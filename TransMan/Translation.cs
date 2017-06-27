@@ -20,5 +20,6 @@ namespace TransMan
         public Nullable<int> language { get; set; }
     
         public virtual Keyword Keyword { get; set; }
+        public virtual ISOLanguage ISOLanguage { get; set; }
     }
 }

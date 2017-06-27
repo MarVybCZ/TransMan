@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="PMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="PMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Enumerations">
           <Key>
             <PropertyRef Name="id" />
@@ -15,6 +15,18 @@
           <Property Name="sortOrder" Type="int" Nullable="false" />
           <Property Name="i18nKey" Type="int" />
           <Property Name="isDefault" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ISOLanguages">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="255" />
+          <Property Name="description" Type="nvarchar(max)" />
+          <Property Name="isActive" Type="tinyint" Nullable="false" />
+          <Property Name="code" Type="nvarchar" MaxLength="3" />
+          <Property Name="isUsedInMasterData" Type="tinyint" Nullable="false" />
+          <Property Name="isUsedInDocumentation" Type="tinyint" Nullable="false" />
         </EntityType>
         <EntityType Name="Keywords">
           <Key>
@@ -35,6 +47,18 @@
           <Property Name="identifier" Type="int" />
           <Property Name="language" Type="int" />
         </EntityType>
+        <Association Name="FKC0BFB802ADA47235">
+          <End Role="ISOLanguages" Type="Self.ISOLanguages" Multiplicity="0..1" />
+          <End Role="Translations" Type="Self.Translations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ISOLanguages">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Translations">
+              <PropertyRef Name="language" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FKC0BFB802D2366272">
           <End Role="Keywords" Type="Self.Keywords" Multiplicity="0..1" />
           <End Role="Translations" Type="Self.Translations" Multiplicity="*" />
@@ -49,15 +73,19 @@
         </Association>
         <EntityContainer Name="PMSModelStoreContainer">
           <EntitySet Name="Enumerations" EntityType="Self.Enumerations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ISOLanguages" EntityType="Self.ISOLanguages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Keywords" EntityType="Self.Keywords" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Translations" EntityType="Self.Translations" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FKC0BFB802ADA47235" Association="Self.FKC0BFB802ADA47235">
+            <End Role="ISOLanguages" EntitySet="ISOLanguages" />
+            <End Role="Translations" EntitySet="Translations" />
+          </AssociationSet>
           <AssociationSet Name="FKC0BFB802D2366272" Association="Self.FKC0BFB802D2366272">
             <End Role="Keywords" EntitySet="Keywords" />
             <End Role="Translations" EntitySet="Translations" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -94,6 +122,7 @@
           <Property Name="identifier" Type="Int32" />
           <Property Name="language" Type="Int32" />
           <NavigationProperty Name="Keyword" Relationship="Self.FKC0BFB802D2366272" FromRole="Translations" ToRole="Keywords" />
+          <NavigationProperty Name="ISOLanguage" Relationship="PMSModel.FKC0BFB802ADA47235" FromRole="Translation" ToRole="ISOLanguage" />
         </EntityType>
         <Association Name="FKC0BFB802D2366272">
           <End Role="Keywords" Type="Self.Keyword" Multiplicity="0..1" />
@@ -119,7 +148,12 @@
             <End Role="Enumeration" EntitySet="Enumerations" />
             <End Role="Keyword" EntitySet="Keywords" />
           </AssociationSet>
-        </EntityContainer>
+          <EntitySet Name="ISOLanguages" EntityType="PMSModel.ISOLanguage" />
+          <AssociationSet Name="FKC0BFB802ADA47235" Association="PMSModel.FKC0BFB802ADA47235">
+            <End Role="ISOLanguage" EntitySet="ISOLanguages" />
+            <End Role="Translation" EntitySet="Translations" />
+          </AssociationSet>
+          </EntityContainer>
         <Association Name="EnumerationKeyword">
           <End Type="PMSModel.Enumeration" Role="Enumeration" Multiplicity="*" />
           <End Type="PMSModel.Keyword" Role="Keyword" Multiplicity="0..1" />
@@ -132,6 +166,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ISOLanguage">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="isActive" Type="Byte" Nullable="false" />
+          <Property Name="code" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="isUsedInMasterData" Type="Byte" Nullable="false" />
+          <Property Name="isUsedInDocumentation" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Translations" Relationship="PMSModel.FKC0BFB802ADA47235" FromRole="ISOLanguage" ToRole="Translation" />
+        </EntityType>
+        <Association Name="FKC0BFB802ADA47235">
+          <End Type="PMSModel.ISOLanguage" Role="ISOLanguage" Multiplicity="0..1" />
+          <End Type="PMSModel.Translation" Role="Translation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ISOLanguage">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Translation">
+              <PropertyRef Name="language" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -139,14 +198,14 @@
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="PMSModelStoreContainer" CdmEntityContainer="PMSEntities">
           <EntitySetMapping Name="Enumerations">
-            <EntityTypeMapping TypeName="PMSModel.Enumeration">
+            <EntityTypeMapping TypeName="IsTypeOf(PMSModel.Enumeration)">
               <MappingFragment StoreEntitySet="Enumerations">
                 <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="enumerationType" ColumnName="enumerationType" />
-                <ScalarProperty Name="value" ColumnName="value" />
-                <ScalarProperty Name="sortOrder" ColumnName="sortOrder" />
-                <ScalarProperty Name="i18nKey" ColumnName="i18nKey" />
                 <ScalarProperty Name="isDefault" ColumnName="isDefault" />
+                <ScalarProperty Name="i18nKey" ColumnName="i18nKey" />
+                <ScalarProperty Name="sortOrder" ColumnName="sortOrder" />
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="enumerationType" ColumnName="enumerationType" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -171,7 +230,20 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          <EntitySetMapping Name="ISOLanguages">
+            <EntityTypeMapping TypeName="PMSModel.ISOLanguage">
+              <MappingFragment StoreEntitySet="ISOLanguages">
+                <ScalarProperty Name="isUsedInDocumentation" ColumnName="isUsedInDocumentation" />
+                <ScalarProperty Name="isUsedInMasterData" ColumnName="isUsedInMasterData" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

@@ -28,7 +28,9 @@ namespace TransMan
         PMSEntities ent = new PMSEntities();
         JavaScriptSerializer jsSer = new JavaScriptSerializer();
         List<TranslationItem> transItems = new List<TranslationItem>();
-        
+
+        EnumerationWrapper enumWrap = null;
+
         public EnumItem CurrentItem { get; set; }
 
         public EnumChild SelectedItem { get; set; }
@@ -36,6 +38,11 @@ namespace TransMan
         public MainWindow()
         {
             InitializeComponent();
+
+            enumWrap = new EnumerationWrapper(ent);
+
+            LBEnums.ItemsSource = enumWrap.EnumTypes;
+            LBEnums.DisplayMemberPath = "Name";
 
             CurrentItem = new EnumItem();
 
@@ -277,7 +284,7 @@ namespace TransMan
                 //dataGrid.ItemsSource = null;
 
                 CurrentItem.EnumChilds.Add(new EnumChild() { LocKey = keyword.identifier, SortOrder = CurrentItem.EnumChilds.Count(), IsDefault = CurrentItem.EnumChilds.Count() == 0 });
-//                dataGrid.ItemsSource = CurrentItem.EnumChilds;
+                //                dataGrid.ItemsSource = CurrentItem.EnumChilds;
                 tabControl.SelectedIndex = 1;
             }
             else
@@ -288,24 +295,24 @@ namespace TransMan
 
         private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (SelectedItem != null)//if not null then set values to old selected item
-            {
-                SelectedItem.LocKey = tbKey.Text;
-                SelectedItem.SortOrder = Convert.ToInt32(tbSort.Text);
-                SelectedItem.Value = tbValue.Text;
-                SelectedItem.IsDefault = (bool)chbDefault.IsChecked;
-            }
-            
-            SelectedItem = (EnumChild)dataGrid.SelectedItem;//set new selected item            
-            
-            if (SelectedItem == null) return;
+            //if (SelectedItem != null)//if not null then set values to old selected item
+            //{
+            //    SelectedItem.LocKey = tbKey.Text;
+            //    SelectedItem.SortOrder = Convert.ToInt32(tbSort.Text);
+            //    SelectedItem.Value = tbValue.Text;
+            //    SelectedItem.IsDefault = (bool)chbDefault.IsChecked;
+            //}
 
-            dataGrid.Items.Refresh();
+            //SelectedItem = (EnumChild)dataGrid.SelectedItem;//set new selected item            
 
-            tbKey.Text = SelectedItem.LocKey;
-            tbSort.Text = SelectedItem.SortOrder.ToString();
-            tbValue.Text = SelectedItem.Value;
-            chbDefault.IsChecked = SelectedItem.IsDefault;
+            //if (SelectedItem == null) return;
+
+            //dataGrid.Items.Refresh();
+
+            //tbKey.Text = SelectedItem.LocKey;
+            //tbSort.Text = SelectedItem.SortOrder.ToString();
+            //tbValue.Text = SelectedItem.Value;
+            //chbDefault.IsChecked = SelectedItem.IsDefault;
         }
 
         private void btSaveEnum_Click(object sender, RoutedEventArgs e)
@@ -360,6 +367,19 @@ namespace TransMan
         private void chbDefault_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show(chbDefault.IsChecked.ToString());
-        }       
+        }
+
+        private void TBEnumFilter_KeyUp(object sender, KeyEventArgs e)
+        {
+            LBEnums.ItemsSource = this.enumWrap.EnumTypes.Where(x => x.Name.IndexOf(TBEnumFilter.Text, StringComparison.InvariantCultureIgnoreCase) > -1).ToList();
+        }
+
+        private void LBEnums_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0)
+                dataGrid.ItemsSource = ((EnumerationType)e.AddedItems[0]).Enumerations;
+            else
+                dataGrid.ItemsSource = null;
+        }        
     }
 }
